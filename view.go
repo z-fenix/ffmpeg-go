@@ -8,9 +8,9 @@ import (
 type ViewType string
 
 const (
-	// FlowChart the diagram type for output in flowchart style (https://mermaid-js.github.io/mermaid/#/flowchart) (including current state
+	// ViewTypeFlowChart FlowChart the diagram type for output in flowchart style (https://mermaid-js.github.io/mermaid/#/flowchart) (including current state
 	ViewTypeFlowChart ViewType = "flowChart"
-	// StateDiagram the diagram type for output in stateDiagram style (https://mermaid-js.github.io/mermaid/#/stateDiagram)
+	// ViewTypeStateDiagram StateDiagram the diagram type for output in stateDiagram style (https://mermaid-js.github.io/mermaid/#/stateDiagram)
 	ViewTypeStateDiagram ViewType = "stateDiagram"
 )
 

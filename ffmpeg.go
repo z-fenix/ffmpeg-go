@@ -8,9 +8,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 // Input file URL (ffmpeg “-i“ option)
@@ -33,7 +32,7 @@ func Input(filename string, kwargs ...KwArgs) *Stream {
 	return NewInputNode("input", nil, args).Stream("", "")
 }
 
-// Add extra global command-line argument(s), e.g. “-progress“.
+// GlobalArgs Add extra global command-line argument(s), e.g. “-progress“.
 func (s *Stream) GlobalArgs(args ...string) *Stream {
 	if s.Type != "OutputStream" {
 		panic("cannot overwrite outputs on non-OutputStream")
@@ -41,7 +40,7 @@ func (s *Stream) GlobalArgs(args ...string) *Stream {
 	return NewGlobalNode("global_args", []*Stream{s}, args, nil).Stream("", "")
 }
 
-// Overwrite output files without asking (ffmpeg “-y“ option)
+// OverwriteOutput Overwrite output files without asking (ffmpeg “-y“ option)
 //
 // Official documentation: `Main options <https://ffmpeg.org/ffmpeg.html#Main-options>`_
 func (s *Stream) OverwriteOutput(stream *Stream) *Stream {
@@ -51,7 +50,7 @@ func (s *Stream) OverwriteOutput(stream *Stream) *Stream {
 	return NewGlobalNode("overwrite_output", []*Stream{stream}, []string{"-y"}, nil).Stream("", "")
 }
 
-// Include all given outputs in one ffmpeg command line
+// MergeOutputs Include all given outputs in one ffmpeg command line
 func MergeOutputs(streams ...*Stream) *Stream {
 	return NewMergeOutputsNode("merge_output", streams).Stream("", "")
 }
@@ -90,7 +89,7 @@ func Output(streams []*Stream, fileName string, kwargs ...KwArgs) *Stream {
 	return NewOutputNode("output", streams, nil, args).Stream("", "")
 }
 
-// Output file URL
+// OutputContext Output file URL
 //
 //	Syntax:
 //	    `ffmpeg.Output(ctx, []*Stream{stream1, stream2, stream3...}, filename, kwargs)`
@@ -140,19 +139,17 @@ func (s *Stream) outputS3Stream(fileName string, kwargs ...KwArgs) *Stream {
 	o := Output([]*Stream{s}, "pipe:", args).
 		WithOutput(w, os.Stdout)
 	done := make(chan struct{})
+	client := s3.NewFromConfig(*awsConfig)
 	runHook := RunHook{
 		f: func() {
 			defer func() {
 				done <- struct{}{}
 			}()
 
-			sess, err := session.NewSession(awsConfig)
-			uploader := s3manager.NewUploader(sess)
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: &bucket,
-				Key:    &key,
-				Body:   r,
-			})
+			_, err := client.PutObject(s.Context, &s3.PutObjectInput{Bucket: &bucket,
+				Key:  &key,
+				Body: r})
+
 			//fmt.Println(ioutil.ReadAll(r))
 			if err != nil {
 				log.Println("upload fail", err)
