@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/u2takey/go-utils/sets"
+	"github.com/z-fenix/ffmpeg-go/sets"
 )
 
 type Stream struct {

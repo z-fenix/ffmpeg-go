@@ -3,10 +3,10 @@ package ffmpeg_go
 import (
 	"bytes"
 	"fmt"
+	rand "math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/u2takey/go-utils/rand"
 )
 
 const (
@@ -317,7 +317,7 @@ func TestPipe(t *testing.T) {
 
 	inBuf := bytes.NewBuffer(nil)
 	for i := 0; i < frameSize*frameCount; i++ {
-		inBuf.WriteByte(byte(rand.IntnRange(0, 255)))
+		inBuf.WriteByte(byte(rand.Intn(255)))
 	}
 	outBuf := bytes.NewBuffer(nil)
 	err := out.WithInput(inBuf).WithOutput(outBuf).Run()

@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/disintegration/imaging"
 	"github.com/stretchr/testify/assert"
-	ffmpeg "github.com/u2takey/ffmpeg-go"
+	ffmpeg "github.com/z-fenix/ffmpeg-go"
 )
 
 //

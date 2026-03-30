@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	ffmpeg "github.com/u2takey/ffmpeg-go"
+	ffmpeg "github.com/z-fenix/ffmpeg-go"
 )
 
 func ExampleReadTimePositionAsJpeg(inFileName string, seconds int) io.Reader {

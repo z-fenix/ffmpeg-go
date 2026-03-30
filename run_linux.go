@@ -3,14 +3,13 @@ package ffmpeg_go
 import (
 	"context"
 	"errors"
-	"io/ioutil"
+	"fmt"
+	"math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strconv"
 	"syscall"
-
-	"github.com/u2takey/go-utils/rand"
 )
 
 const (
@@ -67,7 +66,7 @@ func (s *Stream) WithMemSet(n string) *Stream {
 }
 
 func writeCGroupFile(rootPath, file string, value string) error {
-	return ioutil.WriteFile(filepath.Join(rootPath, file), []byte(value), 0755)
+	return os.WriteFile(filepath.Join(rootPath, file), []byte(value), 0755)
 }
 
 func (s *Stream) RunWithResource(cpuRequest, cpuLimit float32) error {
@@ -79,7 +78,7 @@ func (s *Stream) RunLinux() error {
 	if a.cpuRequest > a.cpuLimit {
 		return errors.New("cpuCoreLimit should greater or equal to cpuCoreRequest")
 	}
-	name := "ffmpeg_go_" + rand.String(6)
+	name := fmt.Sprintf("ffmpeg_go_%d", rand.Int31n(8))
 	rootCpuPath, rootCpuSetPath := filepath.Join(cpuRoot, name), filepath.Join(cpuSetRoot, name)
 	err := os.MkdirAll(rootCpuPath, 0777)
 	if err != nil {

@@ -1,4 +1,4 @@
-module github.com/u2takey/ffmpeg-go
+module github.com/z-fenix/ffmpeg-go
 
 go 1.26.1
 
@@ -8,7 +8,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials  v1.19.13
 	github.com/disintegration/imaging v1.6.2
 	github.com/stretchr/testify v1.11.1
-	github.com/u2takey/go-utils v0.3.1
 	gocv.io/x/gocv v0.43.0
 )
 
