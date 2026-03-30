@@ -7,7 +7,7 @@ check examples/example_test.go and ffmpeg_test.go for more examples.
 # How to get and use
 You can get this package via:
 ```
-go get -u github.com/u2takey/ffmpeg-go
+go get -u github.com/z-fenix/ffmpeg-go
 ```
 
 > **Note**: `ffmpeg-go` makes no attempt to download/install FFmpeg, as `ffmpeg-go` is merely a pure-Go wrapper - whereas FFmpeg installation is platform-dependent/environment-specific, and is thus the responsibility of the user, as described below.
